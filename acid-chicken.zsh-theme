@@ -92,7 +92,6 @@ prompt_status() {
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡" || symbols+="%{%F{yellow}%}💡"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙" || symbols+="%{%F{magenta}%}⛓"
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
-fo:*' stagedstr '✚'
 }
 build_prompt() {
   RETVAL=$?
