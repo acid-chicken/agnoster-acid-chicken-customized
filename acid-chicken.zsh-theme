@@ -17,6 +17,9 @@ prompt_end() {
     echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
   else
     echo -n "%{%k%}"
+  fi
+  echo -n "%{%f%}"
+  CURRENT_BG=''
 }
 prompt_context() {
   local user=`whoami`
@@ -27,9 +30,9 @@ prompt_context() {
 }
 prompt_git() {
   local ref dirty
-  if $(git rev-parse --is-inside-work-tree > /dev/null 2 > &1); then
+  if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
     dirty=$(parse_git_dirty)
-    ref=$(git symbolic-ref HEAD 2 > /dev/null) || ref="➦ $(git show-ref --head -s --abbrev | head -n1 2 > /dev/null)"
+    ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git show-ref --head -s --abbrev | head -n1 2> /dev/null)"
     if [[ -n $dirty ]]; then
       prompt_segment yellow black
     else
@@ -40,8 +43,7 @@ prompt_git() {
     zstyle ':vcs_info:*' enable git
     zstyle ':vcs_info:*' get-revision true
     zstyle ':vcs_info:*' check-for-changes true
-    zstyle ':vcs_info:*' stagedstr '✚'
-    zstyle ':vcs_info:git:*' unstagedstr '●'
+    zstyle ':vcs_in    zstyle ':vcs_info:git:*' unstagedstr '●'
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats '%u%c'
     vcs_info
@@ -50,8 +52,8 @@ prompt_git() {
 }
 prompt_hg() {
   local rev status
-  if $(hg id > /dev/null 2 > &1); then
-    if $(hg prompt >/dev/null 2 > &1); then
+  if $(hg id >/dev/null 2>&1); then
+    if $(hg prompt >/dev/null 2>&1); then
       if [[ $(hg prompt "{status|unknown}") = "?" ]]; then
         prompt_segment red white
         st='±'
@@ -64,8 +66,8 @@ prompt_hg() {
       echo -n $(hg prompt "⭠ {rev}@{branch}") $st
     else
       st=""
-      rev=$(hg id -n 2 > /dev/null | sed 's/[^-0-9]//g')
-      branch=$(hg id -b 2 > /dev/null)
+      rev=$(hg id -n 2>/dev/null | sed 's/[^-0-9]//g')
+      branch=$(hg id -b 2>/dev/null)
       if `hg st | grep -Eq "^\?"`; then
         prompt_segment red black
         st='±'
@@ -89,6 +91,7 @@ prompt_status() {
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡" || symbols+="%{%F{yellow}%}💡"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙" || symbols+="%{%F{magenta}%}⛓"
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
+fo:*' stagedstr '✚'
 }
 build_prompt() {
   RETVAL=$?
