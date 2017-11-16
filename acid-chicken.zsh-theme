@@ -89,8 +89,8 @@ prompt_status() {
   local symbols
   symbols=()
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘" || [[ $RETVAL -eq 0 ]] && symbols+="%{%F{green}%}✔️" || symbols+="  "
-  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡" || symbols+="%{%F{yellow}%}  "
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙" || symbols+="%{%F{magenta}%}  "
+  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡" || symbols+="%{%F{yellow}%}　"
+  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙" || symbols+="%{%F{magenta}%}　"
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols "
 }
 build_prompt() {
