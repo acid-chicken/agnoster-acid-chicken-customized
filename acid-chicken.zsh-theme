@@ -88,10 +88,26 @@ prompt_dir() {
 prompt_status() {
   local symbols
   symbols=()
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}✘" || [[ $RETVAL -eq 0 ]] && symbols+="%{%F{green}%}✔️" || symbols+="  "
-  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡" || symbols+="%{%F{yellow}%} "
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙" || symbols+="%{%F{magenta}%} "
-  [[ -n "$symbols" ]] && prompt_segment black default "$symbols "
+  if [[ $RETVAL -ne 0 ]]; then
+    symbols+="%{%F{red}%}✘"
+  elif [[ $RETVAL -eq 0 ]]; then
+    symbols+="%{%F{green}%}✔️"
+  else
+    symbols+=" "
+  fi
+  if [[ $UID -eq 0 ]]; then
+    symbols+="%{%F{yellow}%}⚡"
+  else
+    symbols+=" "
+  fi
+  if [[ $(jobs -l | wc -l) -gt 0 ]]; then
+    symbols+="%{%F{cyan}%}⚙"
+  else
+    symbols+=" "
+  fi
+  if [[ -n "$symbols" ]]; then
+    prompt_segment black default "$symbols "
+  fi
 }
 build_prompt() {
   RETVAL=$?
